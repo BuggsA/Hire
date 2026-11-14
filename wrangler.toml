@@ -1,0 +1,40 @@
+# Fiveday Studio: one Cloudflare Worker (pages + API) with D1 (database), R2 (private files) and
+# Cloudflare Access (admin login). Entirely separate from Walks for Lucy: its own Worker, database,
+# bucket, secrets and Access applications. Nothing here points at a dog-sit resource.
+name = "fiveday-studio"
+main = "src/worker.js"
+compatibility_date = "2025-09-01"
+compatibility_flags = ["nodejs_compat"]
+keep_vars = true
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+not_found_handling = "none"
+# The Worker answers first: it renders the public pages from the database (prices, portfolio, FAQs),
+# runs the API and protects /admin. Plain files (CSS, JS, images) come from /public.
+run_worker_first = true
+
+[observability]
+enabled = true
+
+# 13:30 UTC daily (8:30/9:30am Eastern): onboarding reminders, overdue invoices and feedback, project
+# start dates, and the morning digest. The hourly run only starts projects on time.
+[triggers]
+crons = ["30 13 * * *", "5 * * * *"]
+
+[vars]
+SITE_URL = "https://fiveday.studio"
+TURNSTILE_HOSTNAMES = "fiveday.studio,www.fiveday.studio"
+
+# Create with: npx wrangler d1 create fiveday-studio  → paste the id below.
+[[d1_databases]]
+binding = "DB"
+database_name = "fiveday-studio"
+database_id = "00000000-0000-0000-0000-000000000000"
+
+# Private bucket for client uploads, previews and agreements. Never make it public.
+# Create with: npx wrangler r2 bucket create fiveday-studio-files
+[[r2_buckets]]
+binding = "FILES"
+bucket_name = "fiveday-studio-files"

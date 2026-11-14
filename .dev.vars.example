@@ -1,0 +1,11 @@
+# Local development only (never commit .dev.vars). Production values go in the Cloudflare dashboard.
+SITE_URL=http://localhost:8787
+DEV_ADMIN_BYPASS=1
+ADMIN_EMAILS=you@example.com
+# RESEND_API_KEY=
+# STRIPE_SECRET_KEY=sk_test_...
+# STRIPE_WEBHOOK_SECRET=whsec_...
+# TURNSTILE_SITE_KEY=1x00000000000000000000AA
+# TURNSTILE_SECRET=1x0000000000000000000000000000000AA
+# TURNSTILE_HOSTNAMES=localhost
+# ANTHROPIC_API_KEY=
